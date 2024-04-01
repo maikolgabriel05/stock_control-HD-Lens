@@ -46,8 +46,8 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'core.urls'
 
 CORS_ALLOWED_ORIGINS = [
-     "http://localhost:8000",  # Adicione a origem do seu aplicativo Vue.js
-     "http://127.0.0.1:8000",  # Adicione a origem do seu aplicativo Vue.js
+     "http://localhost:8000", 
+     "http://127.0.0.1:8000", 
 ]
 
 TEMPLATES = [
