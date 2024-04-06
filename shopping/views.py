@@ -1,7 +1,11 @@
 from django.shortcuts import render
 from rest_framework import generics
+from customers.models import Customers
 from .models import Shop, Product, Cart
-from serializers import ShopSerializer, ProductSerializer, CartSerializer
+from serializers import ShopSerializer, ProductSerializer, CartSerializer, CustomerSerializer
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 
 def shopping(request):
@@ -20,15 +24,30 @@ def cart_items(request, pk):
     return render(request, template_name, context)
 
 
-
 class ShopListCreate(generics.ListCreateAPIView):
-    queryset = Shop.objects.all()
-    serializer_class = ShopSerializer
+    def post(self, request):
+        serializer = ShopSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class ProductListCreate(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
+
 class CartListCreate(generics.ListCreateAPIView):
     queryset = Cart.objects.all()
     serializer_class = CartSerializer
+
+
+class CustomersListView(generics.ListCreateAPIView):
+    queryset = Customers.objects.all()
+    serializer_class = CustomerSerializer
+
+
+class CustomerDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Customers.objects.all()
+    serializer_class = CustomerSerializer
